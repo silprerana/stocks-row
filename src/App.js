@@ -1,23 +1,42 @@
-import logo from './logo.svg';
+import JSONDATA from './NASDAQ_STOCK_SCREENER.json';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <h1 className='title'>StocksRow</h1>
+
+      <input type="text" placeholder='Enter name or ticker symbol here...' onChange={(event) => setSearchTerm(event.target.value)}/>
+      <table>
+        <tr>
+          <th>Symbol</th>
+          <th>Name</th>
+          <th>Last Sale</th>
+          <th>Net Change</th>
+          <th>% Change</th>
+          <th>Market Cap</th>
+        </tr>
+        {JSONDATA.filter((val) => {
+          if (searchTerm == "") {
+            return val;
+          } else if (val.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||  val.Symbol.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return val;
+          }
+        }).map((val, key) => {
+            return <tr>
+                <td>{val.Symbol}</td>
+                <td>{val.Name}</td>
+                <td>{val['Last Sale']}</td>
+                <td>{val['Net Change']}</td>
+                <td>{val['% Change']}</td>
+                <td>{val['Market Cap']}</td>
+              </tr>
+        })}
+      </table>
+      
     </div>
   );
 }
